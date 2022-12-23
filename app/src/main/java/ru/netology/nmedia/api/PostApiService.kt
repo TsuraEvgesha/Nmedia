@@ -32,19 +32,16 @@ interface PostApiService {
     @GET("posts")
     fun getPosts(): Call<List<Post>>
 
-    @GET("posts/{id}")
-    fun getById(@Path("id") id: Long): Call<Post>
-
     @POST("posts")
     fun save(@Body post: Post): Call<Post>
 
     @DELETE("posts/{id}")
     fun delete(@Path("id") postId: Long): Call<Post>
 
-    @POST("likes/{id}/likes")
+    @POST("posts/{id}/likes")
     fun likeById(@Path("id") id:Long): Call<Post>
 
-    @DELETE("likes/{id}/likes")
+    @DELETE("posts/{id}/likes")
     fun dislikeById(@Path("id") id:Long): Call<Post>
 }
 object PostApiServiceHolder{
