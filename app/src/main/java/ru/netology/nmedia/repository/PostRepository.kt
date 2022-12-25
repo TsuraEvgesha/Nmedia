@@ -15,7 +15,5 @@ interface PostRepository {
         fun onSuccess(posts: T){}
         fun onError(e:Exception, code:Int){}
     }
-
-
-
+    
 }

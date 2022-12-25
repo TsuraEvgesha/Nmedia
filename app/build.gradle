@@ -57,6 +57,9 @@ dependencies {
     def room_version = "2.4.3"
     def retrofit_version ="2.9.0"
     def okhttp_logging_version = "4.10.0"
+    def coroutines_version = "1.4.3"
+
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
 
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
