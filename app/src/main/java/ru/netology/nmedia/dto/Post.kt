@@ -10,6 +10,7 @@ data class Post(
     val likes: Int = 0,
     var attachment: Attachment? = null,
 
+
     ) {
     val view: Long = 0
     val video: String? = null
