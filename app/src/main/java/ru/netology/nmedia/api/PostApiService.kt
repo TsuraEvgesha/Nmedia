@@ -41,10 +41,10 @@ interface PostApiService {
     @DELETE("posts/{id}")
     suspend fun removeById(@Path("id") id: Long):Response<Unit>
 
-    @POST("likes/{id}/likes")
+    @POST("posts/{id}/likes")
     suspend fun likeById(@Path("id") id:Long): Response<Post>
 
-    @DELETE("likes/{id}/likes")
+    @DELETE("posts/{id}/likes")
     suspend fun dislikeById(@Path("id") id:Long): Response<Post>
 }
 object PostsApi {

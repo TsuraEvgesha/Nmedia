@@ -74,15 +74,14 @@ class PostRepositoryFileImpl (private val dao: PostDao): PostRepository {
 
     }
     override suspend fun likeById(id: Long) {
-        dao.likeById(id)
         try {
             val response = PostsApi.service.likeById(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
-            val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(PostEntity.fromDto(body))
-
+//            val body = response.body() ?: throw ApiError(response.code(), response.message())
+//            dao.insert(PostEntity.fromDto(body))
+            dao.likeById(id)
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
@@ -90,14 +89,15 @@ class PostRepositoryFileImpl (private val dao: PostDao): PostRepository {
         }
     }
     override suspend fun dislikeById(id: Long){
-        dao.likeById(id)
+//        dao.likeById(id)
         try {
             val response = PostsApi.service.dislikeById(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
-            val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(PostEntity.fromDto(body))
+//            val body = response.body() ?: throw ApiError(response.code(), response.message())
+////            dao.insert(PostEntity.fromDto(body))
+            dao.likeById(id)
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
