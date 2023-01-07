@@ -26,7 +26,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            manifestPlaceholders.usesCLeartextTraffic = true
+            manifestPlaceholders.usesCleartextTraffic = true
             buildConfigField "String", "BASE_URL", '"https://netomedia.ru/api/slow/"'
         }
         debug{
