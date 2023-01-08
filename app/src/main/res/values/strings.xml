@@ -27,5 +27,6 @@
     <string name="todo">TODO</string>
     <string name="input_video_link_here" >Input videolink here</string>
     <string name="post_input_text" >Input text</string>
+    <string name="NewPost" translatable="false">New Post</string>
 </resources>
 

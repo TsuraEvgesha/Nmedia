@@ -22,4 +22,5 @@
     <string name="input_video_link_here">Введите ссылку на видео здесь</string>
     <string name="post_input_text">Введите текст</string>
     <string name="no_post">Здесь пусто. Вы можете добавить первый пост</string>
+    <string name="NewPost">Свежие записи</string>
 </resources>

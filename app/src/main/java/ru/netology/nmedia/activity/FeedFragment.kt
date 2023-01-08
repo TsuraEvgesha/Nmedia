@@ -142,6 +142,24 @@ class FeedFragment : Fragment() {
 //            val action=FeedFragmentDirections.actionFeedFragment2ToNewPostFragment2("")
             findNavController().navigate(R.id.action_feedFragment2_to_newPostFragment2)
         }
+        viewModel.newerCount.observe(viewLifecycleOwner) {state ->
+            if(state !=0){
+                val text = "Свежие новости ($state)"
+                binding.newPosts.text= text
+                binding.newPosts.visibility=View.VISIBLE
+                binding.newPosts.setOnClickListener {
+                    viewModel.loadPosts()
+                    viewModel.updateStatus()
+                    it.visibility = View.GONE
+                    binding.list.scrollToPosition(state)
+                }
+
+
+            }
+
+        }
+
+
 
 //        parentFragmentManager.beginTransaction()
 //            .replace(R.id.nav_host_fragment_container,PostFragment.newInstance("1","2"))
