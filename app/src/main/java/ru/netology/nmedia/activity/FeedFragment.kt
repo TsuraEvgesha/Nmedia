@@ -129,6 +129,17 @@ class FeedFragment : Fragment() {
         viewModel.data.observe(viewLifecycleOwner) { state ->
             adapter.submitList(state.posts)
             binding.emptyPostMes.isVisible=state.empty
+            val sizeList = state.posts.size
+
+            binding.newPosts.setOnClickListener {
+                viewModel.loadPosts()
+                viewModel.updateStatus()
+                it.visibility = View.GONE
+                binding.list.scrollToPosition(sizeList)
+                println(sizeList)
+
+            }
+
         }
 
 
@@ -147,17 +158,11 @@ class FeedFragment : Fragment() {
                 val text = "Свежие новости ($state)"
                 binding.newPosts.text= text
                 binding.newPosts.visibility=View.VISIBLE
-                binding.newPosts.setOnClickListener {
-                    viewModel.loadPosts()
-                    viewModel.updateStatus()
-                    it.visibility = View.GONE
-                    binding.list.scrollToPosition(state)
-                }
-
-
             }
 
         }
+
+
 
 
 
@@ -183,6 +188,8 @@ class FeedFragment : Fragment() {
 
 
 }
+
+
 
 fun counter(item: Long): String {
     return when (item) {

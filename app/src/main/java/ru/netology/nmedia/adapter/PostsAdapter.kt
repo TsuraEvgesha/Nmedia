@@ -16,6 +16,8 @@ import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
 
 
+
+
 const val BASE_URL = "http://10.0.2.2:9999"
 internal class PostsAdapter (private val listener: PostListener): ListAdapter <Post, PostsAdapter.PostViewHolder>(PostDiffCallback())  {
 
@@ -27,6 +29,7 @@ internal class PostsAdapter (private val listener: PostListener): ListAdapter <P
             listener
         )
     }
+
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = getItem(position)
         holder.bind(post)
@@ -56,6 +59,7 @@ class PostViewHolder(
 
 
 
+
             like.setOnClickListener{
                 listener.onLike(post)
             }
@@ -73,6 +77,7 @@ class PostViewHolder(
                 listener.onPlayVideo(post)
 
             }
+
 
 
             menu.setOnClickListener {
