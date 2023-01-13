@@ -1,5 +1,6 @@
 package ru.netology.nmedia.api
 
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -7,6 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import ru.netology.nmedia.BuildConfig
+import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
 import java.util.concurrent.TimeUnit
 
@@ -23,9 +25,9 @@ private val client=OkHttpClient.Builder()
     .build()
 
 private val retrofit=Retrofit.Builder()
+    .addConverterFactory(GsonConverterFactory.create())
     .baseUrl(BASE_URL)
     .client(client)
-    .addConverterFactory(GsonConverterFactory.create())
     .build()
 
 interface PostApiService {
@@ -40,6 +42,10 @@ interface PostApiService {
 
     @POST("posts")
     suspend fun save(@Body post: Post): Response<Post>
+
+    @Multipart
+    @POST("media")
+    suspend fun upload(@Part media: MultipartBody.Part): Response<Media>
 
     @DELETE("posts/{id}")
     suspend fun removeById(@Path("id") id: Long):Response<Unit>

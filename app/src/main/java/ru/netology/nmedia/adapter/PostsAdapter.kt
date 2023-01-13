@@ -16,8 +16,6 @@ import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
 
 
-
-
 const val BASE_URL = "http://10.0.2.2:9999"
 internal class PostsAdapter (private val listener: PostListener): ListAdapter <Post, PostsAdapter.PostViewHolder>(PostDiffCallback())  {
 
@@ -46,19 +44,34 @@ class PostViewHolder(
             binding.attachImage.visibility = View.VISIBLE
             getAttachment(post,binding)
         } else binding.attachImage.visibility = View.GONE
+        if (!post.savedOnServer){
+            binding.like.visibility = View.INVISIBLE
+            binding.share.visibility = View.INVISIBLE
+        } else {
+            binding.like.visibility = View.VISIBLE
+            binding.share.visibility = View.VISIBLE
+        }
+        if (post.savedOnServer){
+            binding.savedOnServer.setImageResource(R.drawable.ic_baseline_public_24)
+        } else binding.savedOnServer.setImageResource(R.drawable.ic_baseline_public_off_24)
+
 
         binding.apply {
             author.text = post.author
             published.text = post.published.toString()
             content.text = post.content
+//            authorAvatar.loadCircleCrop("${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}")
+//            attachImage.loadCircleCrop("${BuildConfig.BASE_URL}/media/${post.attachment?.url}")
+
+
+
+            videoGroup.isVisible = post.video !=null
+//            attachImage.isVisible = post.attachment != null
+
             share.isChecked = post.shareReal
             like.isChecked = post.likedByMe
             share.text = counter(post.share)
             like.text = counter(post.likes.toLong())
-            videoGroup.isVisible = post.video !=null
-
-
-
 
             like.setOnClickListener{
                 listener.onLike(post)
@@ -78,6 +91,9 @@ class PostViewHolder(
 
             }
 
+            attachImage.setOnClickListener {
+                listener.onMedia(post)
+            }
 
 
             menu.setOnClickListener {
@@ -107,7 +123,7 @@ class PostViewHolder(
     }
     private fun getAvatar(post: Post, binding: CardPostBinding){
         Glide.with(binding.authorAvatar)
-            .load("$BASE_URL/avatars/${post.authorAvatar}")
+            .load("${ru.netology.nmedia.adapter.BASE_URL}/avatars/${post.authorAvatar}")
             .placeholder(R.drawable.ic_baseline_account_box_24)
             .circleCrop()
             .timeout(10_000)
@@ -115,7 +131,7 @@ class PostViewHolder(
     }
     private fun getAttachment(post: Post, binding: CardPostBinding){
         Glide.with(binding.attachImage)
-            .load("$BASE_URL/images/${post.attachment?.url}")
+            .load("${ru.netology.nmedia.adapter.BASE_URL}/media/${post.attachment?.url}")
             .error(R.drawable.ic_baseline_cancel_24)
             .timeout(10_000)
             .into(binding.attachImage)

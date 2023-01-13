@@ -4,4 +4,5 @@
     <dimen name="icon_button_min_size">24dp</dimen>
     <dimen name="common_spacing">18dp</dimen>
     <dimen name="small_spacing">12dp</dimen>
+    <dimen name="icon_button_padding">12dp</dimen>
 </resources>

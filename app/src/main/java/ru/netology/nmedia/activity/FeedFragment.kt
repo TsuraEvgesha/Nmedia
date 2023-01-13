@@ -112,6 +112,11 @@ class FeedFragment : Fragment() {
                 findNavController().navigate(action)
 
             }
+
+            override fun onMedia(post: Post) {
+                val action = FeedFragmentDirections.actionFeedFragment2ToMediaFragment(post.attachment?.url.toString())
+                findNavController().navigate(action)
+            }
         }
         )
 
@@ -120,6 +125,7 @@ class FeedFragment : Fragment() {
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             binding.progress.isVisible = state.loading
             binding.swiprefresh.isRefreshing = state.refreshing
+
             if (state.error){
                 Snackbar.make(binding.root,R.string.error_loading,Snackbar.LENGTH_LONG)
                     .setAction("Retry"){viewModel.loadPosts()}
@@ -129,18 +135,14 @@ class FeedFragment : Fragment() {
         viewModel.data.observe(viewLifecycleOwner) { state ->
             adapter.submitList(state.posts)
             binding.emptyPostMes.isVisible=state.empty
-            val sizeList = state.posts.size
+//            val sizeList = state.posts.size
 
-            binding.newPosts.setOnClickListener {
-                viewModel.loadPosts()
-                viewModel.updateStatus()
-                it.visibility = View.GONE
-                binding.list.scrollToPosition(sizeList)
-                println(sizeList)
 
-            }
+
 
         }
+
+
 
 
         binding.swiprefresh.setOnRefreshListener {
@@ -158,6 +160,15 @@ class FeedFragment : Fragment() {
                 val text = "Свежие новости ($state)"
                 binding.newPosts.text= text
                 binding.newPosts.visibility=View.VISIBLE
+            }
+            binding.newPosts.setOnClickListener {
+                viewModel.loadPosts()
+                viewModel.updateStatus()
+                it.visibility = View.GONE
+                binding.list.scrollBy(0,+state)
+                binding.list.scrollTo(0,0)
+//            println(sizeList)
+
             }
 
         }

@@ -95,6 +95,9 @@ class PostFragment : Fragment() {
                 val action=FeedFragmentDirections.actionFeedFragment2ToPostFragment(post.id.toInt())
                 findNavController().navigate(action)
             }
+            override fun onMedia(post: Post) {
+                findNavController().navigate(R.id.action_feedFragment2_to_mediaFragment)
+            }
         }
         )
         viewModel.postCreated.observe(viewLifecycleOwner){

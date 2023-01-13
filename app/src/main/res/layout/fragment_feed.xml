@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.FeedFragment">
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swiprefresh"
         android:layout_width="match_parent"
@@ -18,15 +19,14 @@
             android:id="@id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:isScrollContainer="true"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:scrollbars="vertical"
+            android:verticalScrollbarPosition="right"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/card_post"/>
-
+            tools:listitem="@layout/card_post" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -36,9 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/common_spacing"
         android:drawableLeft="@drawable/ic_baseline_arrow_upward_24"
-        android:fadeScrollbars="false"
         android:insetBottom="6dp"
-        android:isScrollContainer="true"
         android:text="@string/NewPost"
         android:visibility="gone"
         app:cornerRadius="28dp"
@@ -114,5 +112,6 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 

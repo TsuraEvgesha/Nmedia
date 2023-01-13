@@ -1,54 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/common_spacing"
     tools:context=".activity.NewPostFragment">
-    <TableRow>
-        <EditText
-            android:id="@+id/content"
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="@id/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:gravity="top"
-            android:hint="@string/post_input_text"
-            android:importantForAutofill="no"
-            android:inputType="textMultiLine"
-            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+            android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/attachBtn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/common_spacing_small"
-            android:layout_marginBottom="@dimen/common_spacing_small"
+            <EditText
+                android:id="@+id/edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:gravity="top"
+                android:hint="@string/post_input_text"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:textColorHint="#757575" />
 
-            android:contentDescription="@string/todo"
-            android:gravity="end"
-            android:src="@drawable/ic_baseline_attach_file_24"
-            app:icon="@drawable/ic_baseline_attach_file_24" />
+            <FrameLayout
+                android:id="@+id/photoContainer"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/videoLink"
+                <ImageView
+                    android:id="@+id/photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:contentDescription="@string/description_photo"
+                    tools:srcCompat="@tools:sample/avatars[0]" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/removePhoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:text="@string/remove" />
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/common_spacing"
+        android:layout_marginEnd="@dimen/common_spacing"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/buttonPanel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/buttonPanel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/pickPhoto"
+            style="@style/Widget.AppTheme.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autofillHints=""
+            android:contentDescription="@string/description_select_photo"
+            android:padding="@dimen/common_spacing"
+            app:icon="@drawable/ic_photo_24dp" />
 
-            android:hint="@string/input_video_link_here"
-            android:inputType="text"
-            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-    </TableRow>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/takePhoto"
+            style="@style/Widget.AppTheme.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/description_take_photo"
+            android:padding="@dimen/common_spacing"
+            app:icon="@drawable/ic_camera_24dp" />
+    </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_margin="@dimen/common_spacing"
-        android:contentDescription="@string/todo"
-        app:srcCompat="@drawable/ic_baseline_done_24"
-        tools:ignore="ImageContrastCheck,DuplicateSpeakableTextCheck" />
 
-</TableLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

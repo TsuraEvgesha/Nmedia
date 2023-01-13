@@ -23,4 +23,9 @@
     <string name="post_input_text">Введите текст</string>
     <string name="no_post">Здесь пусто. Вы можете добавить первый пост</string>
     <string name="NewPost">Свежие записи</string>
+    <string name="menu_save">Сохранить</string>
+    <string name="description_select_photo">Выбрать фото</string>
+    <string name="description_take_photo">Сделать фото</string>
+    <string name="description_photo">Фото</string>
+    <string name="remove">Удалить</string>
 </resources>

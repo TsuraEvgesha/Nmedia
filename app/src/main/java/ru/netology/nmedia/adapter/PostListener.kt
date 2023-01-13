@@ -10,5 +10,6 @@ interface PostListener  {
     fun onEdit(post: Post)
     fun onPlayVideo(post: Post)
     fun onPost(post: Post)
+    fun onMedia(post: Post)
 
 }
