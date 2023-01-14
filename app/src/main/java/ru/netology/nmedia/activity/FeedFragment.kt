@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.PostListener
@@ -44,35 +45,10 @@ class FeedFragment : Fragment() {
             container,
             false
         )
-//        run {
-//            val preferences= getPreferences(Context.MODE_PRIVATE)
-//            preferences.edit().apply {
-//                putString("key","value")
-//                commit()
-//            }
-//        }
-//        run {
-//            getPreferences(Context.MODE_PRIVATE)
-//                .getString("key","no value")?.let {
-//                    Snackbar.make(binding.root,it,BaseTransientBottomBar.LENGTH_INDEFINITE)
-//                        .show()
-//                }
-//        }
-//        val newPostLauncher = registerForActivityResult(ChangePostActivityContract()){text ->
-//            text?: return@registerForActivityResult
-//            viewModel.editContent(text)
-//            viewModel.save()
-//        }
-
-
-
 
         val adapter = PostsAdapter (object : PostListener {
 
             override fun onEdit(post: Post) {
-//                val action=FeedFragmentDirections.actionFeedFragment2ToNewPostFragment2(post.content)
-//                findNavController().navigate(action)
-
                 viewModel.edit(post)
 
             }
@@ -90,7 +66,7 @@ class FeedFragment : Fragment() {
                 }
                 val shareIntent = Intent.createChooser(intent,getString(R.string.share))
                 startActivity(shareIntent)
-//                viewModel.sharedById(post.id)
+
 
             }
 
@@ -120,12 +96,10 @@ class FeedFragment : Fragment() {
         }
         )
 
-
-        binding.list.adapter = adapter
+        binding.list.adapter=adapter
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             binding.progress.isVisible = state.loading
             binding.swiprefresh.isRefreshing = state.refreshing
-
             if (state.error){
                 Snackbar.make(binding.root,R.string.error_loading,Snackbar.LENGTH_LONG)
                     .setAction("Retry"){viewModel.loadPosts()}
@@ -137,13 +111,7 @@ class FeedFragment : Fragment() {
             binding.emptyPostMes.isVisible=state.empty
 //            val sizeList = state.posts.size
 
-
-
-
         }
-
-
-
 
         binding.swiprefresh.setOnRefreshListener {
             viewModel.refreshPosts()
@@ -152,12 +120,11 @@ class FeedFragment : Fragment() {
             viewModel.loadPosts()
         }
         binding.create.setOnClickListener{
-//            val action=FeedFragmentDirections.actionFeedFragment2ToNewPostFragment2("")
             findNavController().navigate(R.id.action_feedFragment2_to_newPostFragment2)
         }
         viewModel.newerCount.observe(viewLifecycleOwner) {state ->
             if(state !=0){
-                val text = "Свежие новости ($state)"
+                val text = getString(R.string.NewPost) + " ($state)"
                 binding.newPosts.text= text
                 binding.newPosts.visibility=View.VISIBLE
             }
@@ -165,9 +132,17 @@ class FeedFragment : Fragment() {
                 viewModel.loadPosts()
                 viewModel.updateStatus()
                 it.visibility = View.GONE
-                binding.list.scrollBy(0,+state)
-                binding.list.scrollTo(0,0)
-//            println(sizeList)
+                adapter.registerAdapterDataObserver(
+                    object : RecyclerView.AdapterDataObserver() {
+                        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                            if (positionStart == 0) {
+                                binding.list.smoothScrollToPosition(0)
+                            }
+                        }
+                    }
+                )
+
+
 
             }
 
@@ -176,7 +151,7 @@ class FeedFragment : Fragment() {
 
 
 
-
+//
 //        parentFragmentManager.beginTransaction()
 //            .replace(R.id.nav_host_fragment_container,PostFragment.newInstance("1","2"))
 //            .commit()
@@ -199,6 +174,7 @@ class FeedFragment : Fragment() {
 
 
 }
+
 
 
 

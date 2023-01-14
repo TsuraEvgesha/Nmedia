@@ -26,8 +26,6 @@ class NewPostFragment: Fragment() {
         var Bundle.textArg: String? by StringArg
 
     }
-
-//    val args by navArgs<NewPostFragmentArgs>()
     private val viewModel: PostViewModel by activityViewModels()
     private var fragmentBinding: FragmentNewPostBinding? = null
 
@@ -125,17 +123,6 @@ class NewPostFragment: Fragment() {
                 }
         }, viewLifecycleOwner)
 
-
-
-
-
-//
-//        binding.save.setOnClickListener{
-//            viewModel.editContent(binding.content.text.toString())
-//            viewModel.save()
-//
-//
-//        }
 
         return binding.root
     }

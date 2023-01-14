@@ -60,14 +60,7 @@ class PostViewHolder(
             author.text = post.author
             published.text = post.published.toString()
             content.text = post.content
-//            authorAvatar.loadCircleCrop("${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}")
-//            attachImage.loadCircleCrop("${BuildConfig.BASE_URL}/media/${post.attachment?.url}")
-
-
-
             videoGroup.isVisible = post.video !=null
-//            attachImage.isVisible = post.attachment != null
-
             share.isChecked = post.shareReal
             like.isChecked = post.likedByMe
             share.text = counter(post.share)
@@ -114,9 +107,7 @@ class PostViewHolder(
                     }
                 }.show()
             }
-//            root.setOnClickListener {
-//                listener.onPost(post)
-//            }
+
         }
 
 

@@ -27,11 +27,12 @@
     <string name="todo">TODO</string>
     <string name="input_video_link_here">Input videolink here</string>
     <string name="post_input_text">Input text</string>
-    <string name="NewPost" translatable="false">New Post</string>
+    <string name="NewPost" translatable="false">New Posts</string>
     <string name="menu_save">Save</string>
     <string name="description_select_photo">Select photo</string>
     <string name="description_take_photo">Take photo</string>
     <string name="description_photo">Photo</string>
     <string name="remove">Remove</string>
+
 </resources>
 

@@ -22,7 +22,7 @@
     <string name="input_video_link_here">Введите ссылку на видео здесь</string>
     <string name="post_input_text">Введите текст</string>
     <string name="no_post">Здесь пусто. Вы можете добавить первый пост</string>
-    <string name="NewPost">Свежие записи</string>
+    <string name="NewPost">Свежие новости</string>
     <string name="menu_save">Сохранить</string>
     <string name="description_select_photo">Выбрать фото</string>
     <string name="description_take_photo">Сделать фото</string>

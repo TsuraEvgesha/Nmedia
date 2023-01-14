@@ -10,10 +10,17 @@ import com.google.android.gms.common.GoogleApiAvailability
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.FeedFragment.Companion.textArg
 
-class AppActivity : AppCompatActivity(R.layout.activity_app){
+class AppActivity : AppCompatActivity(R.layout.activity_app), OnSelectedButtonListener{
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+
+
+
+//        var fragmentMenegerMedia=supportFragmentManager.findFragmentById(R.id.like) as MediaFragment
+//
+//        var fragmentCard=supportFragmentManager.findFragmentById(R.id.like) as FeedFragment
+//
 
         intent?.let {
             if (it.action!= Intent.ACTION_SEND){
@@ -49,5 +56,10 @@ class AppActivity : AppCompatActivity(R.layout.activity_app){
 
         }
     }
+}
+
+interface OnSelectedButtonListener {
+
+
 }
 

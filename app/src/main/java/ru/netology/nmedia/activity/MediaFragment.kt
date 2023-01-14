@@ -15,6 +15,7 @@ const val BASE_URL = "http://10.0.2.2:9999"
 class MediaFragment: Fragment() {
 
 
+
     private val args by navArgs<MediaFragmentArgs>()
 
     override fun onCreateView(
@@ -34,7 +35,6 @@ class MediaFragment: Fragment() {
             .error(R.drawable.ic_baseline_cancel_24)
             .timeout(10_000)
             .into(binding.imageFull)
-
 
 
         return binding.root

@@ -43,18 +43,7 @@ class PostRepositoryFileImpl (private val dao: PostDao): PostRepository {
             throw UnknownError
         }
     }
-//        try {
-//            val response = PostsApi.retrofitService.getAll()
-//            if (!response.isSuccessful) {
-//                throw ApiError(response.code(), response.message())
-//            }
-//            val body = response.body() ?: throw ApiError(response.code(), response.message())
-//            PostDao.insert(body.toEntity())
-//        } catch (e: IOException){
-//            throw NetworkError
-//        } catch (e:Exception){
-//            throw UnknownError
-//        }
+
 
     override suspend fun save(post: Post) {
         try {
