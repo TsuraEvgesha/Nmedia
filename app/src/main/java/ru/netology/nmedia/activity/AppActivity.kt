@@ -1,26 +1,30 @@
 package ru.netology.nmedia.activity
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
 import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.firebase.messaging.FirebaseMessaging
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.FeedFragment.Companion.textArg
+import ru.netology.nmedia.auth.AppAuth
+import ru.netology.nmedia.viewmodel.AuthViewModel
 
-class AppActivity : AppCompatActivity(R.layout.activity_app), OnSelectedButtonListener{
+class AppActivity : AppCompatActivity(R.layout.activity_app){
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
-
-
-
-//        var fragmentMenegerMedia=supportFragmentManager.findFragmentById(R.id.like) as MediaFragment
-//
-//        var fragmentCard=supportFragmentManager.findFragmentById(R.id.like) as FeedFragment
-//
 
         intent?.let {
             if (it.action!= Intent.ACTION_SEND){
@@ -40,8 +44,65 @@ class AppActivity : AppCompatActivity(R.layout.activity_app), OnSelectedButtonLi
                 )
 
         }
+
+
         checkGoogleApiAvailability()
+
+
+        val viewModel by viewModels<AuthViewModel>()
+
+
+        var currentMenuProvider: MenuProvider? = null
+        viewModel.data.observe(this) {
+            currentMenuProvider?.also { removeMenuProvider(it) }
+            addMenuProvider(object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.menu_main, menu)
+                    val authorized = viewModel.authorized
+                    menu.setGroupVisible(R.id.authorized, authorized)
+                    menu.setGroupVisible(R.id.unAuthorized, !authorized)
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean  =
+                    when (menuItem.itemId) {
+                        R.id.signIn -> {
+                            findNavController(R.id.nav_host_fragment_container).navigate(R.id.signInFragment2)
+                            true
+                        }
+                        R.id.signUp -> {
+                            findNavController(R.id.nav_host_fragment_container).navigate(R.id.registrationFragment)
+                            true
+                        }
+                        R.id.logout -> {
+                            showSignOutDialog()
+                            true
+                        }
+                        else -> false
+                    }
+            }.apply {
+                currentMenuProvider = this
+            })
+        }
     }
+
+    private fun showSignOutDialog(){
+        val listener = DialogInterface.OnClickListener{ _, which->
+            when(which) {
+                DialogInterface.BUTTON_POSITIVE ->  AppAuth.getInstance().removeAuth()
+                DialogInterface.BUTTON_NEGATIVE -> Toast.makeText(this,getString(R.string.yes), Toast.LENGTH_SHORT).show()
+            }
+        }
+        val dialog = AlertDialog.Builder(this)
+            .setCancelable(false)
+            .setTitle(getString(R.string.dialogTitle))
+            .setMessage(getString(R.string.dialogMes))
+            .setPositiveButton(getString(R.string.yes), listener)
+            .setNegativeButton(getString(R.string.no), listener)
+            .create()
+
+        dialog.show()
+    }
+
     private fun checkGoogleApiAvailability(){
         with(GoogleApiAvailability.getInstance()){
             val code = isGooglePlayServicesAvailable(this@AppActivity)
@@ -52,14 +113,15 @@ class AppActivity : AppCompatActivity(R.layout.activity_app), OnSelectedButtonLi
                 getErrorDialog(this@AppActivity,code,9000)?.show()
                 return
             }
-            Toast.makeText(this@AppActivity,"Google Api Unavailable",Toast.LENGTH_LONG).show()
+            Toast.makeText(this@AppActivity,getString(R.string.errorGoogle),Toast.LENGTH_LONG).show()
 
+        }
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            println(it)
         }
     }
 }
 
-interface OnSelectedButtonListener {
 
 
-}
 

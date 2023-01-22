@@ -9,6 +9,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okio.IOException
 import ru.netology.nmedia.api.*
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dto.*
 import ru.netology.nmedia.entity.PostEntity
@@ -164,7 +165,49 @@ class PostRepositoryFileImpl (private val dao: PostDao): PostRepository {
         }
             .catch { e -> throw AppError.from(e) }
             .flowOn(Dispatchers.Default)
+    override suspend fun updateUser(login: String, pass: String) {
+        try {
+            val response = PostsApi.service.updateUser(login, pass)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            val body = response.body()?: throw ApiError(response.code(), response.message())
+            val id = body.id
+            val token = body.token
+            if (token != null) {
+                AppAuth.getInstance().setAuth(id,token)
+            }
 
+        } catch (e: IOException) {
+            throw NetworkError
+        }catch (e: Exception) {
+            println(e)
+            throw UnknownError
+
+        }
+    }
+
+    override suspend fun registerUser(login: String, pass: String, name: String) {
+        try {
+            val response = PostsApi.service.registerUser(login, pass, name)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+            val body = response.body()?: throw ApiError(response.code(), response.message())
+            val id = body.id
+            val token = body.token
+            if (token != null) {
+                AppAuth.getInstance().setAuth(id,token)
+            }
+
+        } catch (e: IOException) {
+            throw NetworkError
+        }catch (e: Exception) {
+            println(e)
+            throw UnknownError
+
+        }
+    }
 
 //    override suspend fun sharedById(id: Long):Post = PostsApi.service.sharedById()
 

@@ -18,4 +18,6 @@ interface PostRepository {
     fun getNewerCount(id: Long): Flow<Int>
     suspend fun updateStatus()
     suspend fun upload(upload: MediaUpload): Media
+    suspend fun updateUser(login: String, pass: String)
+    suspend fun registerUser(login: String, pass: String, name: String)
 }

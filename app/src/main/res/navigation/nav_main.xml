@@ -35,6 +35,15 @@
                 app:argType="string"
                 />
         </action>
+        <action
+            android:id="@+id/action_feedFragment2_to_identificadeFragment"
+            app:destination="@id/identificadeFragment" />
+        <action
+            android:id="@+id/action_feedFragment2_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/action_feedFragment2_to_signInFragment2"
+            app:destination="@id/signInFragment2" />
     </fragment>
     <fragment
         android:id="@+id/newPostFragment2"
@@ -47,7 +56,7 @@
     </fragment>
     <fragment
         android:id="@+id/postFragment"
-        android:name="ru.netology.nmedia.activity.PostFragment"
+
         android:label="fragment_post"
         tools:layout="@layout/fragment_post" >
         <argument
@@ -68,4 +77,19 @@
             android:name="media"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="ru.netology.nmedia.activity.RegistrationFragment"
+        android:label="fragment_registration"
+        tools:layout="@layout/fragment_registration" />
+    <fragment
+        android:id="@+id/identificadeFragment"
+        android:name="ru.netology.nmedia.activity.IdentificadeFragment"
+        android:label="fragment_identificade"
+        tools:layout="@layout/fragment_identificade" />
+    <fragment
+        android:id="@+id/signInFragment2"
+        android:name="ru.netology.nmedia.activity.SignInFragment"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in" />
 </navigation>

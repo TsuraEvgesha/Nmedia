@@ -33,6 +33,30 @@
     <string name="description_take_photo">Take photo</string>
     <string name="description_photo">Photo</string>
     <string name="remove">Remove</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="register">Register</string>
+    <string name="Authorization">Authorization required to continue!</string>
+    <string name="AuthorizationMes">Please go through the authorization procedure!</string>
+    <string name="Later">Later</string>
+    <string name="warningAuth">Please login to use all features.</string>
+    <string name="Code1">Response information code</string>
+    <string name="Code2">Redirect</string>
+    <string name="errorCode1">Client Error</string>
+    <string name="errorCode2">Server error</string>
+    <string name="dialogTitle">Notification</string>
+    <string name="dialogMes">Do you confirm logout?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="errorGoogle">Google Api Unavailable</string>
+    <string name="errorLogPass">Wrong login or password</string>
+    <string name="errorPol">Please complete all fields to continue</string>
+
 
 </resources>
 

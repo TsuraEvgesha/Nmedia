@@ -65,6 +65,7 @@ class PostViewHolder(
             like.isChecked = post.likedByMe
             share.text = counter(post.share)
             like.text = counter(post.likes.toLong())
+            menu.visibility = if (post.ownedByMe) View.VISIBLE else View.INVISIBLE
 
             like.setOnClickListener{
                 listener.onLike(post)
@@ -92,6 +93,7 @@ class PostViewHolder(
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.post_menu)
+                    menu.setGroupVisible(R.id.owned, post.ownedByMe)
                     setOnMenuItemClickListener {item->
                         when(item.itemId){
                             R.id.remove -> {

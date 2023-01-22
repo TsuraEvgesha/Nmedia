@@ -1,5 +1,6 @@
 package ru.netology.nmedia.api
 
+import okhttp3.Interceptor
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -8,9 +9,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import ru.netology.nmedia.BuildConfig
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
-import java.util.concurrent.TimeUnit
+import ru.netology.nmedia.dto.Token
 
 
 private const val BASE_URL = BuildConfig.BASE_URL
@@ -19,9 +21,19 @@ private val logging = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 }
+private val authInterceptor =  Interceptor{ chain->
+    val request = AppAuth.getInstance().data.value?.token?.let {
+        chain.request()
+            .newBuilder()
+            .addHeader("Authorization", it)
+            .build()
+    } ?: chain.request()
+
+    chain.proceed(request)
+}
 private val client=OkHttpClient.Builder()
     .addInterceptor(logging)
-    .connectTimeout(30,TimeUnit.SECONDS)
+    .addInterceptor(authInterceptor)
     .build()
 
 private val retrofit=Retrofit.Builder()
@@ -55,6 +67,14 @@ interface PostApiService {
 
     @DELETE("posts/{id}/likes")
     suspend fun dislikeById(@Path("id") id:Long): Response<Post>
+
+    @FormUrlEncoded
+    @POST ("users/authentication")
+    suspend fun updateUser(@Field("login") login: String, @Field("pass") pass:String): Response<Token>
+
+    @FormUrlEncoded
+    @POST("users/registration")
+    suspend fun registerUser(@Field("login") login: String, @Field("pass") pass: String, @Field("name") name: String): Response<Token>
 }
 object PostsApi {
     val service: PostApiService by lazy {

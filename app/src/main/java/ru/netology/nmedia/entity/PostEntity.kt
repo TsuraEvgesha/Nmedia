@@ -11,6 +11,7 @@ import ru.netology.nmedia.dto.Post
 data class PostEntity (
     @PrimaryKey(autoGenerate = true)
     val id: Long,
+    val authorId:Long,
     val author: String,
     val authorAvatar:String,
     val content: String,
@@ -23,9 +24,9 @@ data class PostEntity (
     var attachment: AttachmentEmbeddable?,
 
 ){
-    fun toDto() = Post(id, author, authorAvatar, content, published, likedByMe, likes,see, attachment?.toDto(), savedOnServer)
+    fun toDto() = Post(id, authorId, author, authorAvatar, content, published, likedByMe, likes,see, attachment?.toDto(), savedOnServer)
     companion object{
-        fun fromDto(dto: Post) = PostEntity(dto.id,dto.author,dto.authorAvatar,dto.content,dto.published,dto.likedByMe,dto.likes,dto.see,dto.savedOnServer, AttachmentEmbeddable.fromDto(dto.attachment))
+        fun fromDto(dto: Post) = PostEntity(dto.id,dto.authorId,dto.author,dto.authorAvatar,dto.content,dto.published,dto.likedByMe,dto.likes,dto.see,dto.savedOnServer, AttachmentEmbeddable.fromDto(dto.attachment))
 
     }
 

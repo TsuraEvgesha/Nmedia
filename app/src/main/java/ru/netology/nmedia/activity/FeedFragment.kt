@@ -1,5 +1,7 @@
 package ru.netology.nmedia.activity
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,9 +15,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.PostListener
 import ru.netology.nmedia.adapter.PostsAdapter
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
@@ -25,6 +29,8 @@ import java.text.DecimalFormat
 
 
 class FeedFragment : Fragment() {
+    @OptIn(ExperimentalCoroutinesApi::class)
+
     private val viewModel: PostViewModel by viewModels(
         ownerProducer= ::requireParentFragment
     )
@@ -35,6 +41,7 @@ class FeedFragment : Fragment() {
             get() = getString(TEXT_KEY)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,13 +56,21 @@ class FeedFragment : Fragment() {
         val adapter = PostsAdapter (object : PostListener {
 
             override fun onEdit(post: Post) {
-                viewModel.edit(post)
+                if (AppAuth.getInstance().data.value != null) {
+                viewModel.edit(post)}
+                else {
+                    showSignInDialog()
+                }
 
             }
             override fun onLike(post: Post) {
-                if (post.likedByMe){
-                    viewModel.dislikeById(post.id)
-                } else viewModel.likeById(post.id)
+                if (AppAuth.getInstance().data.value != null) {
+                    if (post.likedByMe) {
+                        viewModel.dislikeById(post.id)
+                    } else {
+                        viewModel.likeById(post.id)
+                    }
+                }else showSignInDialog()
             }
 
             override fun onShare(post: Post) {
@@ -71,7 +86,11 @@ class FeedFragment : Fragment() {
             }
 
             override fun onRemote(post: Post) {
+                if (AppAuth.getInstance().data.value != null) {
                 viewModel.removeById(post.id)
+            } else {
+                    showSignInDialog()
+            }
             }
 
             override fun onPlayVideo(post: Post) {
@@ -84,8 +103,8 @@ class FeedFragment : Fragment() {
             }
 
             override fun onPost(post: Post) {
-                val action=FeedFragmentDirections.actionFeedFragment2ToPostFragment(post.id.toInt())
-                findNavController().navigate(action)
+//                val action=FeedFragmentDirections.actionFeedFragment2ToPostFragment()
+//                findNavController().navigate(action)
 
             }
 
@@ -102,7 +121,7 @@ class FeedFragment : Fragment() {
             binding.swiprefresh.isRefreshing = state.refreshing
             if (state.error){
                 Snackbar.make(binding.root,R.string.error_loading,Snackbar.LENGTH_LONG)
-                    .setAction("Retry"){viewModel.loadPosts()}
+                    .setAction(getString(R.string.retry_loading)){viewModel.loadPosts()}
                     .show()
             }
         }
@@ -120,7 +139,10 @@ class FeedFragment : Fragment() {
             viewModel.loadPosts()
         }
         binding.create.setOnClickListener{
-            findNavController().navigate(R.id.action_feedFragment2_to_newPostFragment2)
+            if(AppAuth.getInstance().data.value != null){
+                findNavController().navigate(R.id.action_feedFragment2_to_newPostFragment2)
+            } else showSignInDialog()
+
         }
         viewModel.newerCount.observe(viewLifecycleOwner) {state ->
             if(state !=0){
@@ -142,33 +164,42 @@ class FeedFragment : Fragment() {
                     }
                 )
 
-
-
             }
 
         }
 
-
-
-
-//
-//        parentFragmentManager.beginTransaction()
-//            .replace(R.id.nav_host_fragment_container,PostFragment.newInstance("1","2"))
-//            .commit()
         return binding.root
     }
+    private fun showSignInDialog(){
+        val listener = DialogInterface.OnClickListener{ _, which->
+            when(which) {
+                DialogInterface.BUTTON_POSITIVE -> findNavController().navigate(R.id.action_feedFragment2_to_identificadeFragment)
+                DialogInterface.BUTTON_NEGATIVE -> Toast.makeText(context, getString(R.string.warningAuth), Toast.LENGTH_SHORT).show()
+            }
+        }
+        val dialog = AlertDialog.Builder(context)
+            .setCancelable(false)
+            .setTitle(getString(R.string.Authorization))
+            .setMessage(getString(R.string.AuthorizationMes))
+            .setPositiveButton(getString(R.string.sign_in), listener)
+            .setNegativeButton(getString(R.string.Later), listener)
+            .create()
+
+        dialog.show()
+    }
+
     private fun toastOnError(requestCode: Int) {
         if (requestCode.toString().startsWith("1")) {
-            Toast.makeText(context, "Информационный код ответа", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.Code1), Toast.LENGTH_SHORT).show()
         }
         if (requestCode.toString().startsWith("3")) {
-            Toast.makeText(context, "Перенаправление", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.Code2), Toast.LENGTH_SHORT).show()
         }
         if (requestCode.toString().startsWith("4")) {
-            Toast.makeText(context, "Ошибка клиента", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.errorCode1), Toast.LENGTH_SHORT).show()
         }
         if (requestCode.toString().startsWith("5")) {
-            Toast.makeText(context, "Ошибка сервера", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.errorCode2), Toast.LENGTH_SHORT).show()
         }
     }
 

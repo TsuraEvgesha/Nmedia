@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.RegistrationFragment">
+
+    <LinearLayout
+        android:id="@+id/auturiz"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginRight="10dp"
+        android:alwaysDrawnWithCache="false"
+        android:background="@color/bege"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/nameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/name" />
+
+        <EditText
+            android:id="@+id/loginEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/login" />
+
+        <EditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/password" />
+        <EditText
+            android:id="@+id/passwordCheckEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/confirm_password" />
+        <Button
+            android:id="@+id/registerUserBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:insetBottom="6dp"
+            android:text="@string/register" />
+
+    </LinearLayout>
+
+
+
+</FrameLayout>
+

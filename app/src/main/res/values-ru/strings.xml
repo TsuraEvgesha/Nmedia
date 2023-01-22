@@ -5,7 +5,6 @@
     <string name="author" translatable="false">Нетология. Университет интернет-профессий</string>
     <string name="content" translatable="false">Привет, это новая Нетология! Когда-то Нетология начиналась с интенсивов по онлайн-маркетингу. Затем появились курсы по дизайну, разработке, аналитике и управлению. Мы растем сами и помогаем расти студентам:от новичков до уверенных профессионалов. Но самое важное остается с нами: мы верим, что в каждом уже есть сила, которая заставляет хотеть больше, целится выше, бежать быстрее. Наша миссия - помочь встать на путь роста и начать цепочку перемен -> http//netolo.gy/fyb</string>
     <string name="published">21 мая в 18:36</string>
-    <string name="post_remove" translatable="false">Удалить</string>
     <string name="edit" translatable="false">Редактировать</string>
     <string name="shared">Поделились</string>
     <string name="options">Меню</string>
@@ -28,4 +27,29 @@
     <string name="description_take_photo">Сделать фото</string>
     <string name="description_photo">Фото</string>
     <string name="remove">Удалить</string>
+    <string name="sign_in">Вход</string>
+    <string name="sign_up">Регистрация</string>
+    <string name="sign_out">Выход</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="name">Имя</string>
+    <string name="confirm_password">Повторите пароль</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="Authorization">Для продолжения требуется авторизация!</string>
+    <string name="AuthorizationMes">Пожалуйста, пройдите процедуру авторизации!</string>
+    <string name="Later">Позже</string>
+    <string name="warningAuth">Чтобы пользоваться всеми функциями, пройдите авторизацию.</string>
+    <string name="Code1">Информационный код ответа</string>
+    <string name="Code2">Перенаправление</string>
+    <string name="errorCode1">Ошибка клиента</string>
+    <string name="errorCode2">Ошибка сервера</string>
+    <string name="dialogTitle">Уведомление</string>
+    <string name="dialogMes">Вы подтверждаете выход из аккаунта?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="errorGoogle">Google API недоступен</string>
+    <string name="errorLogPass">Неверный логин или пароль</string>
+    <string name="errorPol">Для продолжения заполните все поля</string>
+
+
 </resources>
