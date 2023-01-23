@@ -86,7 +86,14 @@
         android:id="@+id/identificadeFragment"
         android:name="ru.netology.nmedia.activity.IdentificadeFragment"
         android:label="fragment_identificade"
-        tools:layout="@layout/fragment_identificade" />
+        tools:layout="@layout/fragment_identificade" >
+        <action
+            android:id="@+id/action_identificadeFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/action_identificadeFragment_to_signInFragment2"
+            app:destination="@id/signInFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/signInFragment2"
         android:name="ru.netology.nmedia.activity.SignInFragment"

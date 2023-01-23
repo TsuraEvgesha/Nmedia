@@ -163,11 +163,9 @@ class FeedFragment : Fragment() {
                         }
                     }
                 )
-
             }
 
         }
-
         return binding.root
     }
     private fun showSignInDialog(){
