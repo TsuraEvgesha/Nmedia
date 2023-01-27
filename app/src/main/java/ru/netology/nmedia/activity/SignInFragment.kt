@@ -27,7 +27,7 @@ class SignInFragment : Fragment() {
         val binding = FragmentSignInBinding.inflate(inflater, container, false)
 
         binding.loginBtn.setOnClickListener {
-            if (binding.loginEditText.text.isNotEmpty() && binding.passwordEditText.text.isNotEmpty() ){
+            if (binding.loginEditText.text.toString().isNotEmpty() && binding.passwordEditText.text.toString().isNotEmpty() ){
                 val login = binding.loginEditText.text.toString()
                 val pass = binding.passwordEditText.text.toString()
                 viewModel.updateUser(login,pass)

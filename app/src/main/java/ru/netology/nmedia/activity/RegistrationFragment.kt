@@ -26,17 +26,26 @@ class RegistrationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentRegistrationBinding.inflate(inflater, container,false)
+
+
         binding.registerUserBtn.setOnClickListener {
-            if (binding.loginEditText.text.isNotEmpty() &&
-                binding.passwordEditText.text.isNotEmpty()&&
-                binding.nameEditText.text.isNotEmpty()){
+
+            if (binding.loginEditText.text.toString().isNotEmpty() &&
+                binding.passwordEditText.text.toString().isNotEmpty()&&
+                binding.nameEditText.text.toString().isNotEmpty()&&
+                binding.passwordEditText.text.toString() == binding.passwordCheckEditText.text.toString()){
                 val login = binding.loginEditText.text.toString()
                 val password = binding.passwordEditText.text.toString()
                 val name = binding.nameEditText.text.toString()
                 viewModel.registerUser(login,password,name)
 
+            } else if (binding.passwordEditText.text.toString() != binding.passwordCheckEditText.text.toString()) {
+                Snackbar.make(binding.root, getString(R.string.errorPassword), Snackbar.LENGTH_LONG).show()
             } else Snackbar.make(binding.root, getString(R.string.errorPol), Snackbar.LENGTH_LONG).show()
         }
+
+
+
         viewModel.tokenReceived.observe(viewLifecycleOwner) {
             if (it == 0){
                 findNavController().navigateUp()

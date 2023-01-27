@@ -2,8 +2,15 @@ package ru.netology.nmedia.auth
 
 import android.content.Context
 import androidx.core.content.edit
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import ru.netology.nmedia.api.PostsApi
+import ru.netology.nmedia.dto.PushToken
 import ru.netology.nmedia.dto.Token
 
 class AppAuth private constructor(context: Context) {
@@ -19,6 +26,8 @@ class AppAuth private constructor(context: Context) {
         } else{
             _data.value = Token(id, token)
         }
+        sendPushToken()
+
     }
 
     @Synchronized
@@ -28,6 +37,7 @@ class AppAuth private constructor(context: Context) {
             remove(TOKEN_KEY)
             remove(ID_KEY)
         }
+        sendPushToken()
     }
 
     @Synchronized
@@ -37,7 +47,22 @@ class AppAuth private constructor(context: Context) {
             putString(TOKEN_KEY, token)
             putLong(ID_KEY, id)
         }
+        sendPushToken()
     }
+    fun sendPushToken (token: String?=null){
+        CoroutineScope(Dispatchers.Default).launch {
+            try {
+                val pushToken = PushToken(token ?: FirebaseMessaging.getInstance().token.await())
+                PostsApi.service.sendPushToken(pushToken)
+
+            } catch (e:Exception){
+                e.printStackTrace()
+                //do nothing
+            }
+
+        }
+    }
+    fun getId(): Long = prefs.getLong(ID_KEY, 0L)
 
     companion object {
         private const val ID_KEY = "ID_KEY"

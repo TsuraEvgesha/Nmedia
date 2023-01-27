@@ -12,6 +12,7 @@ import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.dto.PushToken
 import ru.netology.nmedia.dto.Token
 
 
@@ -42,7 +43,11 @@ private val retrofit=Retrofit.Builder()
     .client(client)
     .build()
 
-interface PostApiService {
+interface ApiService {
+
+    @POST("users/push-tokens")
+    suspend fun sendPushToken(@Body pushToken: PushToken): Response<Unit>
+
     @GET("posts")
     suspend fun getAll(): Response<List<Post>>
 
@@ -77,7 +82,7 @@ interface PostApiService {
     suspend fun registerUser(@Field("login") login: String, @Field("pass") pass: String, @Field("name") name: String): Response<Token>
 }
 object PostsApi {
-    val service: PostApiService by lazy {
-        retrofit.create(PostApiService::class.java)
+    val service: ApiService by lazy {
+        retrofit.create(ApiService::class.java)
     }
 }

@@ -50,6 +50,7 @@
     <string name="errorGoogle">Google API недоступен</string>
     <string name="errorLogPass">Неверный логин или пароль</string>
     <string name="errorPol">Для продолжения заполните все поля</string>
+    <string name="errorPassword">Пароли не совпадают!</string>
 
 
 </resources>

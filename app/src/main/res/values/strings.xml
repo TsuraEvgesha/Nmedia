@@ -56,6 +56,7 @@
     <string name="errorGoogle">Google Api Unavailable</string>
     <string name="errorLogPass">Wrong login or password</string>
     <string name="errorPol">Please complete all fields to continue</string>
+    <string name="errorPassword">Passwords do not match!</string>
 
 
 </resources>
