@@ -1,8 +1,11 @@
 package ru.netology.nmedia.dao
 
 import androidx.room.*
+
 import kotlinx.coroutines.flow.Flow
 import ru.netology.nmedia.entity.PostEntity
+
+
 @Dao
 interface PostDao {
     @Query("SELECT * FROM PostEntity WHERE see = 1 ORDER BY id DESC")
@@ -10,7 +13,6 @@ interface PostDao {
 
     @Query("SELECT COUNT(*) == 0 FROM PostEntity")
     suspend fun isEmpty():Boolean
-
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(post: PostEntity)
@@ -20,6 +22,7 @@ interface PostDao {
 
     @Query("UPDATE PostEntity SET content=:content WHERE id = :id")
     suspend fun updateContentById(id:Long,content:String)
+
 
     suspend fun save(post: PostEntity) =
         if (post.id == 0L) insert(post) else updateContentById(post.id,post.content)

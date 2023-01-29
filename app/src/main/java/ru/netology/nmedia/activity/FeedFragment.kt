@@ -11,10 +11,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.PostListener
@@ -25,21 +26,25 @@ import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import javax.inject.Inject
 
 
-
+@AndroidEntryPoint
 class FeedFragment : Fragment() {
-    @OptIn(ExperimentalCoroutinesApi::class)
 
-    private val viewModel: PostViewModel by viewModels(
-        ownerProducer= ::requireParentFragment
-    )
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val viewModel: PostViewModel by activityViewModels()
+
+    @Inject
+    lateinit var appAuth: AppAuth
+
     companion object {
         private  const val TEXT_KEY="TEXT_KEY"
         var Bundle.textArg: String?
             set(value) = putString(TEXT_KEY, value)
             get() = getString(TEXT_KEY)
     }
+
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun onCreateView(
@@ -56,7 +61,7 @@ class FeedFragment : Fragment() {
         val adapter = PostsAdapter (object : PostListener {
 
             override fun onEdit(post: Post) {
-                if (AppAuth.getInstance().data.value != null) {
+                if (appAuth.authStateFlow.value.id != 0L) {
                 viewModel.edit(post)}
                 else {
                     showSignInDialog()
@@ -64,7 +69,7 @@ class FeedFragment : Fragment() {
 
             }
             override fun onLike(post: Post) {
-                if (AppAuth.getInstance().data.value != null) {
+                if (appAuth.authStateFlow.value.id != 0L) {
                     if (post.likedByMe) {
                         viewModel.dislikeById(post.id)
                     } else {
@@ -86,7 +91,7 @@ class FeedFragment : Fragment() {
             }
 
             override fun onRemote(post: Post) {
-                if (AppAuth.getInstance().data.value != null) {
+                if (appAuth.authStateFlow.value.id != 0L) {
                 viewModel.removeById(post.id)
             } else {
                     showSignInDialog()
@@ -139,7 +144,7 @@ class FeedFragment : Fragment() {
             viewModel.loadPosts()
         }
         binding.create.setOnClickListener{
-            if(AppAuth.getInstance().data.value != null){
+            if(appAuth.authStateFlow.value.token != null){
                 findNavController().navigate(R.id.action_feedFragment2_to_newPostFragment2)
             } else showSignInDialog()
 

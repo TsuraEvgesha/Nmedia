@@ -1,47 +1,14 @@
 package ru.netology.nmedia.api
 
-import okhttp3.Interceptor
+
 import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
-import ru.netology.nmedia.BuildConfig
-import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.dto.PushToken
 import ru.netology.nmedia.dto.Token
 
-
-private const val BASE_URL = BuildConfig.BASE_URL
-private val logging = HttpLoggingInterceptor().apply {
-    if (BuildConfig.DEBUG) {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
-}
-private val authInterceptor =  Interceptor{ chain->
-    val request = AppAuth.getInstance().data.value?.token?.let {
-        chain.request()
-            .newBuilder()
-            .addHeader("Authorization", it)
-            .build()
-    } ?: chain.request()
-
-    chain.proceed(request)
-}
-private val client=OkHttpClient.Builder()
-    .addInterceptor(logging)
-    .addInterceptor(authInterceptor)
-    .build()
-
-private val retrofit=Retrofit.Builder()
-    .addConverterFactory(GsonConverterFactory.create())
-    .baseUrl(BASE_URL)
-    .client(client)
-    .build()
 
 interface ApiService {
 
@@ -80,9 +47,4 @@ interface ApiService {
     @FormUrlEncoded
     @POST("users/registration")
     suspend fun registerUser(@Field("login") login: String, @Field("pass") pass: String, @Field("name") name: String): Response<Token>
-}
-object PostsApi {
-    val service: ApiService by lazy {
-        retrofit.create(ApiService::class.java)
-    }
 }

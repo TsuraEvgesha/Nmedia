@@ -15,12 +15,27 @@ import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.FeedFragment.Companion.textArg
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.viewmodel.AuthViewModel
+import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class AppActivity : AppCompatActivity(R.layout.activity_app){
+
+    @Inject
+    lateinit var appAuth: AppAuth
+
+    @Inject
+    lateinit var firebaseMessaging: FirebaseMessaging
+
+    @Inject
+    lateinit var googleApiAvailability: GoogleApiAvailability
+
+    val viewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +61,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app){
 
         checkGoogleApiAvailability()
 
-        val viewModel by viewModels<AuthViewModel>()
+
 
         var currentMenuProvider: MenuProvider? = null
         viewModel.data.observe(this) {
@@ -84,7 +99,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app){
     private fun showSignOutDialog(){
         val listener = DialogInterface.OnClickListener{ _, which->
             when(which) {
-                DialogInterface.BUTTON_POSITIVE ->  AppAuth.getInstance().removeAuth()
+                DialogInterface.BUTTON_POSITIVE ->  appAuth.removeAuth()
                 DialogInterface.BUTTON_NEGATIVE -> Toast.makeText(this,getString(R.string.yes), Toast.LENGTH_SHORT).show()
             }
         }
@@ -100,7 +115,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app){
     }
 
     private fun checkGoogleApiAvailability(){
-        with(GoogleApiAvailability.getInstance()){
+        with(googleApiAvailability){
             val code = isGooglePlayServicesAvailable(this@AppActivity)
             if (code == ConnectionResult.SUCCESS){
                 return@with
@@ -112,7 +127,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app){
             Toast.makeText(this@AppActivity,getString(R.string.errorGoogle),Toast.LENGTH_LONG).show()
 
         }
-        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+        firebaseMessaging.token.addOnSuccessListener {
             println(it)
         }
     }
