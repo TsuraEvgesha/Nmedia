@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentRegistrationBinding
+import ru.netology.nmedia.viewmodel.PostViewModel
 import ru.netology.nmedia.viewmodel.RegistrationViewModel
 
 
@@ -22,7 +24,8 @@ class RegistrationFragment : Fragment() {
 
     }
 
-    private  val viewModel: RegistrationViewModel by viewModels()
+    private  val viewModel: RegistrationViewModel by activityViewModels()
+    val postViewModel: PostViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +55,7 @@ class RegistrationFragment : Fragment() {
         viewModel.tokenReceived.observe(viewLifecycleOwner) {
             if (it == 0){
                 findNavController().navigateUp()
+                postViewModel.refreshPosts()
             } else {
                 Snackbar.make(binding.root, getString(R.string.errorLogPass), Snackbar.LENGTH_LONG).show()
             }

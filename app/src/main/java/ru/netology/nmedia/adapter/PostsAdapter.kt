@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.nmedia.R
@@ -17,7 +17,7 @@ import ru.netology.nmedia.dto.Post
 
 
 const val BASE_URL = "http://10.0.2.2:9999"
-internal class PostsAdapter (private val listener: PostListener): ListAdapter <Post, PostsAdapter.PostViewHolder>(PostDiffCallback())  {
+internal class PostsAdapter (private val listener: PostListener): PagingDataAdapter <Post, PostsAdapter.PostViewHolder>(PostDiffCallback())  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -29,7 +29,7 @@ internal class PostsAdapter (private val listener: PostListener): ListAdapter <P
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        val post = getItem(position)
+        val post = getItem(position)?: return
         holder.bind(post)
     }
 

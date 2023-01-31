@@ -20,6 +20,7 @@ import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.FeedFragment.Companion.textArg
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.viewmodel.AuthViewModel
+import ru.netology.nmedia.viewmodel.PostViewModel
 import javax.inject.Inject
 
 
@@ -36,6 +37,8 @@ class AppActivity : AppCompatActivity(R.layout.activity_app){
     lateinit var googleApiAvailability: GoogleApiAvailability
 
     val viewModel: AuthViewModel by viewModels()
+
+    val postViewModel: PostViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +89,8 @@ class AppActivity : AppCompatActivity(R.layout.activity_app){
                         }
                         R.id.logout -> {
                             showSignOutDialog()
+                            postViewModel.refreshPosts()
+
                             true
                         }
                         else -> false
@@ -112,6 +117,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app){
             .create()
 
         dialog.show()
+        postViewModel.refreshPosts()
     }
 
     private fun checkGoogleApiAvailability(){

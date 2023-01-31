@@ -12,11 +12,13 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
+import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collectLatest
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.PostListener
 import ru.netology.nmedia.adapter.PostsAdapter
@@ -130,15 +132,25 @@ class FeedFragment : Fragment() {
                     .show()
             }
         }
-        viewModel.data.observe(viewLifecycleOwner) { state ->
-            adapter.submitList(state.posts)
-            binding.emptyPostMes.isVisible=state.empty
-//            val sizeList = state.posts.size
-
+        lifecycleScope.launchWhenCreated {
+            viewModel.data.collectLatest {
+                adapter.submitData(it)
+            }
         }
 
+        lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest {
+
+                binding.swiprefresh.isRefreshing = it.refresh is LoadState.Loading
+                        || it.append is LoadState.Loading
+                        || it.prepend is LoadState.Loading
+
+            }
+        }
+
+
         binding.swiprefresh.setOnRefreshListener {
-            viewModel.refreshPosts()
+            adapter.refresh()
         }
         binding.retry.setOnClickListener {
             viewModel.loadPosts()
@@ -149,28 +161,28 @@ class FeedFragment : Fragment() {
             } else showSignInDialog()
 
         }
-        viewModel.newerCount.observe(viewLifecycleOwner) {state ->
-            if(state !=0){
-                val text = getString(R.string.NewPost) + " ($state)"
-                binding.newPosts.text= text
-                binding.newPosts.visibility=View.VISIBLE
-            }
-            binding.newPosts.setOnClickListener {
-                viewModel.loadPosts()
-                viewModel.updateStatus()
-                it.visibility = View.GONE
-                adapter.registerAdapterDataObserver(
-                    object : RecyclerView.AdapterDataObserver() {
-                        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                            if (positionStart == 0) {
-                                binding.list.smoothScrollToPosition(0)
-                            }
-                        }
-                    }
-                )
-            }
-
-        }
+//        viewModel.newerCount.observe(viewLifecycleOwner) {state ->
+//            if(state !=0){
+//                val text = getString(R.string.NewPost) + " ($state)"
+//                binding.newPosts.text= text
+//                binding.newPosts.visibility=View.VISIBLE
+//            }
+//            binding.newPosts.setOnClickListener {
+//                viewModel.loadPosts()
+//                viewModel.updateStatus()
+//                it.visibility = View.GONE
+//                adapter.registerAdapterDataObserver(
+//                    object : RecyclerView.AdapterDataObserver() {
+//                        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+//                            if (positionStart == 0) {
+//                                binding.list.smoothScrollToPosition(0)
+//                            }
+//                        }
+//                    }
+//                )
+//            }
+//
+//        }
         return binding.root
     }
     private fun showSignInDialog(){
