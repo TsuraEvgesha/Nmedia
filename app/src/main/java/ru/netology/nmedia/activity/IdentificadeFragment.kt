@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import ru.netology.nmedia.R
-import ru.netology.nmedia.adapter.fragmentAdapter
+import ru.netology.nmedia.adapter.FragmentAdapter
 import ru.netology.nmedia.databinding.FragmentIdentificadeBinding
 
 
@@ -27,7 +27,7 @@ class IdentificadeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentIdentificadeBinding.inflate(this.layoutInflater)
-        val adapter = fragmentAdapter(this,fragList)
+        val adapter = FragmentAdapter(this,fragList)
         binding.placeHolder.adapter=adapter
         TabLayoutMediator(binding.tb,binding.placeHolder){
             tab, pos -> tab.text=fragListTitle[pos]

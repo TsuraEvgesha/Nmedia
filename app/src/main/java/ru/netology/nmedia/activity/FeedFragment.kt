@@ -17,7 +17,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.PostListener
@@ -34,7 +33,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class FeedFragment : Fragment() {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     private val viewModel: PostViewModel by activityViewModels()
 
     @Inject
@@ -48,7 +46,7 @@ class FeedFragment : Fragment() {
     }
 
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -123,14 +121,18 @@ class FeedFragment : Fragment() {
         )
 
         binding.list.adapter=adapter
-        viewModel.dataState.observe(viewLifecycleOwner) { state ->
-            binding.progress.isVisible = state.loading
-            binding.swiprefresh.isRefreshing = state.refreshing
-            if (state.error){
-                Snackbar.make(binding.root,R.string.error_loading,Snackbar.LENGTH_LONG)
-                    .setAction(getString(R.string.retry_loading)){viewModel.loadPosts()}
-                    .show()
-            }
+//        viewModel.dataState.observe(viewLifecycleOwner) { state ->
+//            binding.progress.isVisible = state.loading
+//            binding.swiprefresh.isRefreshing = state.refreshing
+//            if (state.error){
+//                Snackbar.make(binding.root,R.string.error_loading,Snackbar.LENGTH_LONG)
+//                    .setAction(getString(R.string.retry_loading)){viewModel.loadPosts()}
+//                    .show()
+//            }
+//
+//        }
+        viewModel.tokenReceived.observe(viewLifecycleOwner){
+            adapter.refresh()
         }
         lifecycleScope.launchWhenCreated {
             viewModel.data.collectLatest {
@@ -149,18 +151,20 @@ class FeedFragment : Fragment() {
         }
 
 
+
         binding.swiprefresh.setOnRefreshListener {
             adapter.refresh()
         }
-        binding.retry.setOnClickListener {
-            viewModel.loadPosts()
-        }
+//        binding.retry.setOnClickListener {
+//            viewModel.loadPosts()
+//        }
         binding.create.setOnClickListener{
             if(appAuth.authStateFlow.value.token != null){
                 findNavController().navigate(R.id.action_feedFragment2_to_newPostFragment2)
             } else showSignInDialog()
 
         }
+
 //        viewModel.newerCount.observe(viewLifecycleOwner) {state ->
 //            if(state !=0){
 //                val text = getString(R.string.NewPost) + " ($state)"

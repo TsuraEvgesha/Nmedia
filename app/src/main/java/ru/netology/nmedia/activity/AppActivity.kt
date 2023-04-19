@@ -22,6 +22,7 @@ import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 import javax.inject.Inject
+import kotlin.text.Typography.dagger
 
 
 @AndroidEntryPoint
