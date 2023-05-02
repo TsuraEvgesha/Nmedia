@@ -43,36 +43,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <TextView
-        android:id="@+id/retryText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/common_spacing"
-        android:text="@string/no_post"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/retry"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"/>
-    <Button
-        android:id="@+id/retry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/retry_loading"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/retryText"
-        tools:ignore="SpeakableTextPresentCheck"/>
+<!--    <TextView-->
+<!--        android:id="@+id/retryText"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="@dimen/common_spacing"-->
+<!--        android:text="@string/no_post"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/retry"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_chainStyle="packed"/>-->
+<!--    <Button-->
+<!--        android:id="@+id/retry"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/retry_loading"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/retryText"-->
+<!--        tools:ignore="SpeakableTextPresentCheck"/>-->
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/error"
-        android:layout_width="wrap_content"
-        android:visibility="gone"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="retryText,retry"/>
+<!--    <androidx.constraintlayout.widget.Group-->
+<!--        android:id="@+id/error"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:visibility="gone"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:constraint_referenced_ids="retryText,retry"/>-->
 
     <TextView
         android:id="@+id/emptyPostMes"

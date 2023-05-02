@@ -18,15 +18,14 @@ data class PostEntity (
     val published: Long,
     val likedByMe: Boolean,
     val likes: Int = 0,
-    val see: Boolean,
     val savedOnServer: Boolean,
     @Embedded
-    var attachment: AttachmentEmbeddable?,
+    var attachment: Attachment?,
 
 ){
-    fun toDto() = Post(id, authorId, author, authorAvatar, content, published, likedByMe, likes,see, attachment?.toDto(), savedOnServer)
+    fun toDto() = Post(id, authorId, author, authorAvatar, content, published, likedByMe, likes, attachment, savedOnServer)
     companion object{
-        fun fromDto(dto: Post) = PostEntity(dto.id,dto.authorId,dto.author,dto.authorAvatar,dto.content,dto.published,dto.likedByMe,dto.likes,dto.see,dto.savedOnServer, AttachmentEmbeddable.fromDto(dto.attachment))
+        fun fromDto(dto: Post) = PostEntity(dto.id,dto.authorId,dto.author,dto.authorAvatar,dto.content,dto.published,dto.likedByMe,dto.likes,dto.savedOnServer,dto.attachment)
 
     }
 
@@ -38,9 +37,7 @@ data class AttachmentEmbeddable(
     fun toDto() = Attachment(url, type)
 
     companion object {
-        fun fromDto(dto: Attachment?) = dto?.let {
-            AttachmentEmbeddable(it.url, it.type)
-        }
+        fun fromDto(dto: Post) =PostEntity(dto.id,dto.authorId,dto.author,dto.authorAvatar,dto.content,dto.published,dto.likedByMe,dto.likes,dto.savedOnServer,dto.attachment)
     }
 
 

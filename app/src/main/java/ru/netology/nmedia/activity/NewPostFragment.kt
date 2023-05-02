@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toFile
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -59,7 +58,7 @@ class NewPostFragment: Fragment() {
                     }
                     Activity.RESULT_OK -> {
                         val uri: Uri? = it.data?.data
-                        viewModel.changePhoto(uri, uri?.toFile())
+                        viewModel.changePhoto(uri)
                     }
                 }
             }
@@ -90,7 +89,7 @@ class NewPostFragment: Fragment() {
         }
 
         binding.removePhoto.setOnClickListener {
-            viewModel.changePhoto(null, null)
+            viewModel.changePhoto(null)
         }
         viewModel.postCreated.observe(viewLifecycleOwner) {
             findNavController().navigateUp()

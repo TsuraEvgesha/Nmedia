@@ -12,26 +12,69 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.counter
+import ru.netology.nmedia.databinding.CardAdBinding
 import ru.netology.nmedia.databinding.CardPostBinding
+import ru.netology.nmedia.dto.Ad
+import ru.netology.nmedia.dto.FeedItem
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.view.load
 
 
 const val BASE_URL = "http://10.0.2.2:9999"
-internal class PostsAdapter (private val listener: PostListener): PagingDataAdapter <Post, PostsAdapter.PostViewHolder>(PostDiffCallback())  {
+internal class PostsAdapter (private val listener: PostListener) : PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(PostDiffCallback()) {
+    override fun getItemViewType(position: Int): Int =
+        when (getItem(position)){
+            is Ad -> R.layout.card_ad
+            is Post -> R.layout.card_post
+            null -> error("unknown item type")
+        }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val binding = CardPostBinding.inflate(inflater, parent, false)
-        return  PostViewHolder(
-            binding,
-            listener
-        )
-    }
 
-    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        val post = getItem(position)?: return
-        holder.bind(post)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+        when(viewType) {
+            R.layout.card_post -> {
+                val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                PostViewHolder(binding, listener)
+            }
+            R.layout.card_ad -> {
+                val binding = CardAdBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                AdViewHolder(binding)
+            }
+            else -> error("unknown item type: $viewType")
+        }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+//        val post = getItem(position) ?: return
+//        holder.bind(post)
+        when (val item = getItem(position)){
+            is Ad -> (holder as? AdViewHolder)?.bind(item)
+            is Post -> (holder as? PostViewHolder)?.bind(item)
+            null -> error("unknown item type")
+        }
     }
+}
+class AdViewHolder(
+    private val binding: CardAdBinding
+): RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(ad: Ad) {
+        binding.image.load("$BASE_URL/media/${ad.image}")
+    }
+}
+
+//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
+//        val inflater = LayoutInflater.from(parent.context)
+//        val binding = CardPostBinding.inflate(inflater, parent, false)
+//        return  PostViewHolder(
+//            binding,
+//            listener
+//        )
+//    }
+//
+//    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+//        val post = getItem(position)?: return
+//        holder.bind(post)
+//    }
 
 
 class PostViewHolder(
@@ -130,13 +173,16 @@ class PostViewHolder(
             .into(binding.attachImage)
     }
 }
-    class PostDiffCallback: DiffUtil.ItemCallback<Post>(){
-        override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
+    class PostDiffCallback: DiffUtil.ItemCallback<FeedItem>(){
+        override fun areItemsTheSame(oldItem: FeedItem, newItem: FeedItem): Boolean {
+            if (oldItem::class != newItem::class){
+                return false
+            }
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
+        override fun areContentsTheSame(oldItem: FeedItem, newItem: FeedItem): Boolean {
             return oldItem == newItem
         }
     }
-}
+

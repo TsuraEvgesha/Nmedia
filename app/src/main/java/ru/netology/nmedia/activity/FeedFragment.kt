@@ -9,17 +9,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
-import com.google.android.material.snackbar.Snackbar
+import androidx.recyclerview.widget.DividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.PostListener
+import ru.netology.nmedia.adapter.PostLoadingStateAdapter
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentFeedBinding
@@ -75,7 +75,7 @@ class FeedFragment : Fragment() {
                     } else {
                         viewModel.likeById(post.id)
                     }
-                }else showSignInDialog()
+                } else showSignInDialog()
             }
 
             override fun onShare(post: Post) {
@@ -120,7 +120,23 @@ class FeedFragment : Fragment() {
         }
         )
 
-        binding.list.adapter=adapter
+//        binding.list.adapter=adapter
+        binding.list.adapter = adapter.withLoadStateHeaderAndFooter(
+            header = PostLoadingStateAdapter{
+                adapter.retry()},
+            footer = PostLoadingStateAdapter{
+                adapter.retry()
+            }
+        )
+
+        binding.list.addItemDecoration(
+            DividerItemDecoration(binding.list.context, DividerItemDecoration.VERTICAL)
+        )
+//        lifecycleScope.launchWhenCreated {
+//            viewModel.data.collectLatest {
+//                adapter.submitData(it)
+//            }
+//        }
 //        viewModel.dataState.observe(viewLifecycleOwner) { state ->
 //            binding.progress.isVisible = state.loading
 //            binding.swiprefresh.isRefreshing = state.refreshing
@@ -134,18 +150,14 @@ class FeedFragment : Fragment() {
         viewModel.tokenReceived.observe(viewLifecycleOwner){
             adapter.refresh()
         }
-        lifecycleScope.launchWhenCreated {
-            viewModel.data.collectLatest {
-                adapter.submitData(it)
-            }
-        }
+
 
         lifecycleScope.launchWhenCreated {
-            adapter.loadStateFlow.collectLatest {
+            adapter.loadStateFlow.collectLatest { state ->
 
-                binding.swiprefresh.isRefreshing = it.refresh is LoadState.Loading
-                        || it.append is LoadState.Loading
-                        || it.prepend is LoadState.Loading
+                binding.swiprefresh.isRefreshing = state.refresh is LoadState.Loading
+//                        || state.append is LoadState.Loading
+//                        || state.prepend is LoadState.Loading
 
             }
         }
