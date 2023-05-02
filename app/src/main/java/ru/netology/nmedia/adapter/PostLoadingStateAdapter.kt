@@ -31,8 +31,8 @@ class PostLoadingViewHolder(
     fun bind(loadState: LoadState) {
         itemLoadingBinding.apply {
             progress.isVisible = loadState is LoadState.Loading
-            retryButton.isVisible = loadState is LoadState.Error
-            retryButton.setOnClickListener {
+            retry.isVisible = loadState is LoadState.Error
+            retry.setOnClickListener {
                 retryListener()
             }
         }
